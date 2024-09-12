@@ -1,0 +1,3 @@
+- Gather a (hopefully) comprehensive list of USB device identifications from various public sources.
+- Offer a C interface (source code, static libraries, dynamic libraries etc.) to use.
+- Bindings to other languages (Python, C# etc.) and technologies (e.g. COM, scripting) as progressing.
