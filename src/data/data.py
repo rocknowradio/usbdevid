@@ -18,8 +18,7 @@ class Data(Opt):
     outfn = self.arg('output')
   
     sources = WebSources()
-    # sources.add_sources(['LinuxUSB', 'UsbVendor'])
-    sources.add_sources(['UsbVendor'])
+    sources.add_sources(['LinuxUSB', 'UsbVendor'])
 
     self.records_ = sources.read(debug=self.debug())
 

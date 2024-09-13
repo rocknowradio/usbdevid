@@ -1,6 +1,5 @@
-import httplib2
-import StringIO
-from data_source import WebDataSource
+import urllib.request
+from .data_source import WebDataSource
 
 class LinuxUsb(WebDataSource):
   def __init__(self):
@@ -29,21 +28,21 @@ class LinuxUsb(WebDataSource):
     if debug:
       print('=> %s read' % LinuxUsb.id())
   
-    buffer = StringIO.StringIO()
+    data = None
     fail = False
     while not fail:
       try:
         url = 'http://www.linux-usb.org/usb.ids'
-        http = httplib2.Http()
-        response = http.request(url)
-        buffer.write(response[1])
-      except ex as Exception:
+        req = urllib.request.urlopen(url)
+        data = req.read().decode(errors="ignore")
+      except Exception as ex:
         fail = True
         print('ex: %s' % str(ex))
       if fail:
         break
+      if data is None:
+        break
 
-      data = buffer.getvalue()
       rows = data.splitlines()
 
       vendor_started = False
