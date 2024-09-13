@@ -1,5 +1,5 @@
 from linux_usb import LinuxUsb
-from device_hunt import DeviceHunt
+from usb_vendor import UsbVendor
 
 class WebSources:
   def __init__(self):
@@ -14,13 +14,13 @@ class WebSources:
     if name == 'LinuxUSB':
       self.sources_.append({ 'name': 'LinuxUSB',
                              'handler': LinuxUsb()})
-    #elif name == 'DeviceHunt':
-    #  self.sources_.append({ 'name': 'DeviceHunt',
-    #                         'handler': DeviceHunt()})
+    if name == 'UsbVendor':
+      self.sources_.append({ 'name': 'UsbVendor',
+                             'handler': UsbVendor()})
 
-  def read(self):
+  def read(self, debug=False):
     for source in self.sources_:
-      records = source['handler'].read()
+      records = source['handler'].read(debug)
       self.records_.update(records)
 
     return self.records_

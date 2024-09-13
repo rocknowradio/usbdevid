@@ -3,7 +3,7 @@ import sys
 class Opt:
   @staticmethod
   def parse_cmd_line(argv):
-    kw = []
+    kw = {}
     for c in range(0, len(argv)):
       if argv[c][:2] == '--':
         kv = argv[c][2:].split('=')
@@ -13,41 +13,26 @@ class Opt:
           else:
             k, v = kv[0], '='.join(kv[1:])
           if len(k) != 0:
-            kw.append([k, v])
+            kw[k] = v
     return kw
     
   def __init__(self, argv):
     self.argv_ = Opt.parse_cmd_line(argv)
     if self.debug():
       print('argv =>')
-      for c in range(0, len(self.argv_)):
-        print('argv[%s]=[%s]' % (self.karg(c), self.varg(self.karg(c))))
+      for k in self.argv_:
+        print('argv[%s]=[%s]' % (k, self.argv_[k]))
       print('<= argv')
 
-  def kvarg(self, index):
-    if index is None:
+  def arg(self, name):
+    if name is None or name not in self.argv_:
       return None
-    if index < 0 or index > len(self.argv_):
-      return None
-    return self.argv_[index][0], self.argv_[index][1]
+    return self.argv_[name]
 
-  def karg(self, index):
-    if index is None:
+  def is_arg(self, name):
+    if name is None or name not in self.argv_:
       return None
-    if index < 0 or index > len(self.argv_):
-      return None
-    return self.argv_[index][0]
-
-  def varg(self, name):
-    if name is None:
-      return None
-    for c in range(0, len(self.argv_)):
-      if self.kvarg(c)[0] == name:
-        return self.kvarg(c)[1]
-    return None
+    return True
 
   def debug(self):
-    for c in range(0, len(self.argv_)):
-      if self.kvarg(c)[0] == 'debug':
-        return True
-    return False
+    return self.is_arg('debug')

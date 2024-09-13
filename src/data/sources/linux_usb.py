@@ -16,17 +16,19 @@ class LinuxUsb(WebDataSource):
   #   'id': vendor_id,
   #   'name': vendor_name,
   #   'devices': [
-  #     'id': device_id,
-  #     'name': device_name,
-  #     'interfaces': [
-  #     ]
+  #     { 'id': device_id,
+  #       'name': device_name,
+  #       'interfaces': [
+  #       ]
+  #     }
   #   ]
   # }
   # Since there seems to be no interfaces, we'll ignore it for now.
   #
-  def read(self):
-    print('  **=> %s read' % LinuxUsb.id())
-
+  def read(self, debug):
+    if debug:
+      print('=> %s read' % LinuxUsb.id())
+  
     buffer = StringIO.StringIO()
     fail = False
     while not fail:
@@ -59,11 +61,10 @@ class LinuxUsb(WebDataSource):
           continue
 
         if row.startswith('\t\t'):
-          # interface interface_name
-          row = row.strip()
-          print('   interface: %s' % (row))
+          # interface  interface_name
+          continue
         elif row.startswith('\t'):
-          # device device_name
+          # device  device_name
           d_row = row.strip()
           if len(d_row) > 6:
             if d_row[4:6] == '  ':
@@ -73,7 +74,7 @@ class LinuxUsb(WebDataSource):
                   self.records_[last_vendor_id]['devices'].append(
                     {'id': d_id, 'name': d_name})
         else:
-          # vendor vendor_name
+          # vendor  vendor_name
           if not vendor_started:
             vendor_started = True
           v_row = row.strip()
@@ -89,7 +90,9 @@ class LinuxUsb(WebDataSource):
                   self.records_[v_id]['name'] = v_name
           
       break
-    
-    print('  **records: %d' % len(self.records_))
-    print('  **<= %s read' % LinuxUsb.id())
+
+    if debug:
+      print('records: %d' % len(self.records_))
+      print('<= %s read' % LinuxUsb.id())
+
     return self.records_
