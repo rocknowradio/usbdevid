@@ -6,6 +6,10 @@ class LinuxUsb(WebDataSource):
   def __init__(self):
     WebDataSource.__init__(self)
 
+  @staticmethod
+  def id():
+    return 'LinuxUSB'
+
   #
   # data:
   # <vid>: {
@@ -21,7 +25,8 @@ class LinuxUsb(WebDataSource):
   # Since there seems to be no interfaces, we'll ignore it for now.
   #
   def read(self):
-    print('=> LinuxUsb read')
+    print('  **=> %s read' % LinuxUsb.id())
+
     buffer = StringIO.StringIO()
     fail = False
     while not fail:
@@ -85,6 +90,6 @@ class LinuxUsb(WebDataSource):
           
       break
     
-    print('  records: %d' % len(self.records_))
-    print('<= LinuxUsb read')
+    print('  **records: %d' % len(self.records_))
+    print('  **<= %s read' % LinuxUsb.id())
     return self.records_

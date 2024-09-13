@@ -1,3 +1,4 @@
+import json
 import os
 import sys
 from util.opt import Opt
@@ -21,14 +22,17 @@ class Data(Opt):
 
     self.records_ = sources.read()
 
-    count = 0
     for vid in self.records_:
       record = self.records_[vid]
-      # print('    %s %s' % (record['id'], record['name']))
       if 'devices' in record and len(record['devices']) != 0:
         devices = record['devices']
         for c in range(0, len(devices)):
-          print('  %4s:%4s %-40s %s' % (record['id'], devices[c]['id'], record['name'], devices[c]['name']))
+          if c < 10:
+            print('  %4s:%4s %-40s %s' % (record['id'], devices[c]['id'], record['name'], devices[c]['name']))
+    #print('\n\n')
+    j = json.dumps(self.records_, indent=4, sort_keys=True)
+    print(j)
+    
     print('<= Run')
 
 if __name__ == '__main__':
