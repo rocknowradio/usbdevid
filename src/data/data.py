@@ -17,8 +17,7 @@ class Data(Opt):
   def run(self):
     print('=> Run')
     sources = WebSources()
-    sources.add_source('LinuxUSB')
-    sources.add_source('DeviceHunt')
+    sources.add_sources(['LinuxUSB', 'DeviceHunt'])
 
     self.records_ = sources.read()
 
@@ -27,9 +26,13 @@ class Data(Opt):
       if 'devices' in record and len(record['devices']) != 0:
         devices = record['devices']
         for c in range(0, len(devices)):
-          if c < 10:
-            print('  %4s:%4s %-40s %s' % (record['id'], devices[c]['id'], record['name'], devices[c]['name']))
-    #print('\n\n')
+          print('  %4s:%4s %-40s %s' %
+                (record['id'], devices[c]['id'],
+                 record['name'], devices[c]['name']))
+      else:
+        print('  %4s      %-40s' %
+              (record['id'], record['name']))
+    print('\n\n')
     j = json.dumps(self.records_, indent=4, sort_keys=True)
     print(j)
     
