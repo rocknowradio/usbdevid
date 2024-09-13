@@ -19,11 +19,16 @@ class Data(Opt):
     sources.add_source('LinuxUSB')
     sources.add_source('DeviceHunt')
 
-    records = sources.read()
+    self.records_ = sources.read()
 
-    print('  records: %s' % len(self.records_))
-    for record in self.records_:
-      print('    %s' % (record))
+    count = 0
+    for vid in self.records_:
+      record = self.records_[vid]
+      # print('    %s %s' % (record['id'], record['name']))
+      if 'devices' in record and len(record['devices']) != 0:
+        devices = record['devices']
+        for c in range(0, len(devices)):
+          print('  %4s:%4s %-40s %s' % (record['id'], devices[c]['id'], record['name'], devices[c]['name']))
     print('<= Run')
 
 if __name__ == '__main__':

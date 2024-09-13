@@ -3,7 +3,7 @@ from device_hunt import DeviceHunt
 
 class WebSources:
   def __init__(self):
-    self.records_ = []
+    self.records_ = {}
     self.sources_ = []
 
   def add_source(self, name):
@@ -17,15 +17,14 @@ class WebSources:
     for source in self.sources_:
       print('=> %s::read' % source['name'])
       records = source['handler'].read()
-      print('records: %s' % records)
+      print('[*] records: %d' % len(records))
+      # print('<= %s::read' % source['name'])
+      # TODO should merge ?
+      self.records_.update(records)
+      print('[*] self.records_: %d' % len(self.records_))
       print('<= %s::read' % source['name'])
-      if False:
-        self.records_.append(records) # TODO should merge
-      else:
-        for record in records:
-          self.records_.append(record)
-    print('  records: %s' % len(self.records_))
-    for record in self.records_:
-      print('    %s: %s' % (record['id'], record['data']))
+    print('  records: %d' % len(self.records_))
+    #for vid in self.records_:
+    #  print('    %s: %s' % (vid, record[vid]))
     print('<= WebSources::read')
     return self.records_
