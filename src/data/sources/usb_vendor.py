@@ -61,7 +61,6 @@ class UsbVendor(WebDataSource):
     read_records = 0
     for c in range(0, len(all_data)):
       read_records += len(all_data[c])
-    #print('++ while loop done. fail:%s all_data:%d read_records:%d' % ('yes' if fail else 'no', len(all_data), read_records))
 
     l = len(all_data)
     for i in range(0, len(all_data)):
@@ -69,13 +68,11 @@ class UsbVendor(WebDataSource):
         e = all_data[i][j]
         while True:
           d_id = to_hex(e['Identifier'] if 'Identifier' in e else None)
-          d_name = e['Name'] if 'Name' in e else None
-          # print('d_id=%s type(d_id)=%s d_name=%s' % (d_id, type(d_id), d_name))
+          d_name = e['Name'] if 'Name' in e else ''
           if 'Vendor' in e:
             if e['Vendor'] is not None:
               v_id = to_hex(e['Vendor']['Identifier'] if 'Identifier' in e['Vendor'] else None)
-              v_name = e['Vendor']['Name'] if 'Name' in e['Vendor'] else None
-              #print('v_id=%s type(v_id)=%s v_name=%s' % (v_id, type(v_id), v_name))
+              v_name = e['Vendor']['Name'] if 'Name' in e['Vendor'] else ''
           if v_id is not None:
             v_id = v_id.zfill(4)
             if v_id not in self.records_:
@@ -87,7 +84,6 @@ class UsbVendor(WebDataSource):
     
     if debug:
       print('records: %d' % len(self.records_))
-      print('records: %s' % self.records_)
       print('<= %s read' % UsbVendor.id())
 
     return self.records_

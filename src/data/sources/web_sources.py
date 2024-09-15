@@ -14,14 +14,14 @@ class WebSources:
     if name == 'LinuxUSB':
       self.sources_.append({ 'name': 'LinuxUSB',
                              'handler': LinuxUsb()})
-    if name == 'UsbVendor':
+    elif name == 'UsbVendor':
       self.sources_.append({ 'name': 'UsbVendor',
                              'handler': UsbVendor()})
-    # TODO: https://linux-hardware.org/ 
-    #       https://bsd-hardware.info/
+    # => https://linux-hardware.org/ 
+    # => https://bsd-hardware.info/
 
 
-  def       read(self, debug=False):
+  def read(self, debug=False):
     for source in self.sources_:
       records = source['handler'].read(debug)
 
@@ -33,7 +33,6 @@ class WebSources:
           # check if record is in self.records_
           v_id = record['id']
           if v_id not in self.records_:
-            # print('new record from vendor: %s' % v_id)
             self.records_[v_id] = record
           else:
             # exists; how to merge?
@@ -46,7 +45,6 @@ class WebSources:
                 exists = True
                 break
             if not exists:
-              print('new name from vendor: %s' % record['name'])
               self.records_[v_id]['name'] += '|%s' % record['name']
               
             # devices
@@ -60,8 +58,9 @@ class WebSources:
                   break
                   
               if not exists:
-                #print('new device from vendor: %s' % device)
-                self.records_[v_id]['devices'].append({'id': device['id'], 'name': device['name']})
+                self.records_[v_id]['devices'].append(
+                  {'id': device['id'],
+                   'name': device['name']})
               else:
                 for j in range(0, len(self.records_[v_id]['devices'])):
                   if self.records_[v_id]['devices'][j]['id'] == device['id']:
@@ -72,7 +71,6 @@ class WebSources:
                         exists = True
                         break
                     if not exists:
-                      #print('new name for device:%s : %s' % (self.records_[v_id]['devices'][j], device['name']))
                       self.records_[v_id]['devices'][j]['name'] += '|%s' % device['name']
 
     return self.records_
