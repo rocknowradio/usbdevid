@@ -18,7 +18,7 @@ class Opt:
     
   def __init__(self, argv):
     self.argv_ = Opt.parse_cmd_line(argv)
-    if self.debug():
+    if False: # self.debug():
       print('argv =>')
       for k in self.argv_:
         print('argv[%s]=[%s]' % (k, self.argv_[k]))
